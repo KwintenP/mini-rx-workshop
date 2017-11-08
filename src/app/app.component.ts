@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {WalmartApiService} from './modules/walmart/services/walmart-api.service';
 
 @Component({
   selector: 'app-root',
