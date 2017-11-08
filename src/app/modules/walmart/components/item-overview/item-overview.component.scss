@@ -1,0 +1,12 @@
+@import '../../../../../variables';
+
+:host {
+  height: calc(100vh - 220px);
+  margin: 10px 10px;
+  padding: 10px 10px;
+
+  .card-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

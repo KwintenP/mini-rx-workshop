@@ -1,0 +1,21 @@
+:host {
+  margin: 5px 5px;
+
+  .card {
+    height: 500px;
+
+    .card-text {
+      max-height: 150px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      overflow: hidden;
+
+      hyphens: auto;
+    }
+
+    .card-img-top {
+      height: 100px;
+      width: 100px;
+    }
+  }
+}
