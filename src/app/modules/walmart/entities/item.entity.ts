@@ -3,4 +3,5 @@ export class Item {
   shortDescription: string;
   thumbnailImage: string;
   salePrice: number;
+  count: number;
 }

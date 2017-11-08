@@ -6,3 +6,4 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/scan';
