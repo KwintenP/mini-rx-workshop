@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-basket-overview',
@@ -11,7 +12,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
         <div class="col-sm-6">
           <input readonly
                  formControlName="nrOfElements"
-                 type="text" class="form-control" id="nrOfElements" placeholder="Number of elements">
+                 type="text" class="form-control-plaintext" id="nrOfElements" placeholder="Number of elements">
         </div>
       </div>
       <div class="form-group row">
@@ -19,7 +20,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
         <div class="col-sm-6">
           <input readonly
                  formControlName="totalPrice"
-                 type="text" class="form-control" id="totalPrice" placeholder="Total price">
+                 type="text" class="form-control-plaintext" id="totalPrice" placeholder="Total price">
         </div>
       </div>
     </form>
@@ -29,14 +30,14 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class BasketOverviewComponent implements OnInit {
   @Input()
   set nrOfElements(nrOfElements) {
-    if (nrOfElements) {
+    if (!isNullOrUndefined(nrOfElements)) {
       this.basketOverviewFormGroup.patchValue({nrOfElements});
     }
   }
 
   @Input()
   set totalPrice(totalPrice) {
-    if (totalPrice) {
+    if (!isNullOrUndefined(totalPrice)) {
       this.basketOverviewFormGroup.patchValue({totalPrice});
     }
   }

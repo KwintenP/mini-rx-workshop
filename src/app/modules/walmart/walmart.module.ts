@@ -12,6 +12,7 @@ import { CardComponent } from './components/card/card.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BasketService} from './services/basket.service';
 import { BasketOverviewComponent } from './components/basket-overview/basket-overview.component';
+import { DiscountsComponent } from './components/discounts/discounts.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,7 @@ import { BasketOverviewComponent } from './components/basket-overview/basket-ove
     WalmartApiService,
     BasketService
   ],
-  declarations: [ShoppingListOverviewComponent, ItemFilterComponent, ItemOverviewComponent, ItemBasketComponent, CardComponent, BasketOverviewComponent]
+  declarations: [ShoppingListOverviewComponent, ItemFilterComponent, ItemOverviewComponent, ItemBasketComponent, CardComponent, BasketOverviewComponent, DiscountsComponent]
 })
 export class WalmartModule {
 }

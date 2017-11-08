@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Subject} from 'rxjs/Subject';
 import {BasketService} from '../../services/basket.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-shopping-list-overview',
@@ -20,6 +21,8 @@ import {BasketService} from '../../services/basket.service';
                          (removeItem)="removeItem($event)"
                          (oneExtra)="changeCount($event, 1)"
                          (oneLess)="changeCount($event, -1)"></app-item-basket>
+        <app-discounts (vatFree)="vatFree$.next($event)"
+                       (discountCode)="discountCode$.next($event)"></app-discounts>
         <app-basket-overview [nrOfElements]="nrOfElements$ | async"
                              [totalPrice]="totalPrice$ | async"></app-basket-overview>
       </div>
@@ -30,6 +33,8 @@ import {BasketService} from '../../services/basket.service';
 export class ShoppingListOverviewComponent implements OnInit {
   searchTerm$ = new ReplaySubject<string>();
   reset$ = new Subject<Array<any>>();
+  vatFree$ = new BehaviorSubject<boolean>(false);
+  discountCode$ = new BehaviorSubject<number>(0);
 
   foundItems$: Observable<Array<Item>>;
   basket$: Observable<Array<Item>>;
@@ -59,8 +64,11 @@ export class ShoppingListOverviewComponent implements OnInit {
     this.nrOfElements$ = this.basket$
       .map(items => items.reduce<number>((acc: number, curr) => acc + curr.count, 0));
 
-    this.totalPrice$ = this.basket$
-      .map(items => items.reduce<number>((acc: number, curr) => acc + curr.count * curr.salePrice, 0))
+    const basketPrice$ = this.basket$
+      .map(items => items.reduce<number>((acc: number, curr) => acc + curr.count * curr.salePrice, 0));
+
+    this.totalPrice$ = basketPrice$.combineLatest(this.vatFree$, (basketPrice, vatFree) => vatFree ? basketPrice / 1.21 : basketPrice)
+      .combineLatest(this.discountCode$, (vatBasketPrice, discountCode) => vatBasketPrice - discountCode)
       .map(totalValue => totalValue.toFixed(1));
   }
 

@@ -7,3 +7,4 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/combineLatest';
