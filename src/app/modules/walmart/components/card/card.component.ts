@@ -4,7 +4,7 @@ import {Item} from '../../entities/item.entity';
 @Component({
   selector: 'app-card',
   template: `
-    <div class="card" style="width: 20rem;">
+    <div class="card">
       <img class="card-img-top" [src]="item.thumbnailImage">
       <div class="card-body">
         <h4 class="card-title">{{item.name}}</h4>

@@ -11,10 +11,10 @@ export class WalmartApiService {
   constructor(private http: HttpClient) {
   }
 
-  searchItems(term: string, page: number): Observable<SearchResult> {
+  searchItems(term: string, page: number, priceFrom: number, priceTo: number): Observable<SearchResult> {
     return this.http
       .get(
-        `http://api.walmartlabs.com/v1/search?query=${term}&start=${page * this.PAGE_SIZE + 1}&format=json&facet=on&apiKey=${this.API_KEY}`
+        `http://api.walmartlabs.com/v1/search?query=${term}&start=${page * this.PAGE_SIZE + 1}&format=json&facet=on&apiKey=${this.API_KEY}&facet.range=price:[${priceFrom} TO ${priceTo}]`
       );
   }
 }

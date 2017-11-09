@@ -12,7 +12,9 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
   template: `
     <div class="content">
       <div class="main">
-        <app-item-filter (searchTermChange)="searchTerm$.next($event)"></app-item-filter>
+        <app-item-filter (searchTermChange)="searchTerm$.next($event)"
+                         (priceFromChange)="priceFrom$.next($event)"
+                         (priceToChange)="priceTo$.next($event)"></app-item-filter>
         <app-item-overview [items]="foundItems$ | async"
                            (itemAdded)="itemAdded($event)"></app-item-overview>
       </div>
@@ -31,7 +33,9 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
   styleUrls: ['./shopping-list-overview.component.scss']
 })
 export class ShoppingListOverviewComponent implements OnInit {
-  searchTerm$ = new ReplaySubject<string>();
+  searchTerm$ = new BehaviorSubject<string>('');
+  priceFrom$ = new ReplaySubject<number>(1);
+  priceTo$ = new ReplaySubject<number>(1);
   reset$ = new Subject<Array<any>>();
   vatFree$ = new BehaviorSubject<boolean>(false);
   discountCode$ = new BehaviorSubject<number>(0);
@@ -49,12 +53,18 @@ export class ShoppingListOverviewComponent implements OnInit {
     const clearData$ = this.reset$
       .mapTo([]);
 
-    const searchResults$ = this.searchTerm$
+    const handledSearchTerm$ = this.searchTerm$
       .do(_ => this.reset$.next([]))
       .debounceTime(200)
       .distinctUntilChanged()
-      .filter(item => item.length > 1)
-      .switchMap(searchTerm => this.walmartApiService.searchItems(searchTerm, 0))
+      .filter(item => item.length > 1);
+
+    const searchFilter$ = Observable.combineLatest(handledSearchTerm$.do(console.log), this.priceFrom$.do(console.log)
+      , this.priceTo$.do(console.log))
+      .do(console.log);
+
+    const searchResults$ = searchFilter$
+      .switchMap(([searchTerm, priceFrom, priceTo]) => this.walmartApiService.searchItems(searchTerm, 0, priceFrom, priceTo))
       .map(response => response.items);
 
     this.foundItems$ = clearData$.merge(searchResults$);
