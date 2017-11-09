@@ -59,8 +59,7 @@ export class ShoppingListOverviewComponent implements OnInit {
       .distinctUntilChanged()
       .filter(item => item.length > 1);
 
-    const searchFilter$ = Observable.combineLatest(handledSearchTerm$.do(console.log), this.priceFrom$.do(console.log)
-      , this.priceTo$.do(console.log))
+    const searchFilter$ = Observable.combineLatest(handledSearchTerm$, this.priceFrom$, this.priceTo$)
       .do(console.log);
 
     const searchResults$ = searchFilter$
