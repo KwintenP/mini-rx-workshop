@@ -10,25 +10,16 @@ export class BasketService {
   private items$ = new Subject<{ type: 'ADD' | 'REMOVE', value: Item, count?: number }>();
 
   constructor() {
-    this.basket$ = this.items$
-      .scan<{ type: 'ADD' | 'REMOVE', value: Item, count?: number }, Array<Item>>(
-        (acc: Array<Item>, curr: { type: 'ADD' | 'REMOVE', value: Item, count?: number }) => {
-          switch (curr.type) {
-            case 'ADD':
-              const foundItem = acc.find(item => item.name === curr.value.name);
-              if (foundItem) {
-                return acc.map(item => item.name === curr.value.name ? {
-                  ...item,
-                  count: item.count + curr.count
-                } : item)
-                  .filter(item => item.count > 0);
-              } else {
-                return [...acc, {...curr.value, count: 1}];
-              }
-            case 'REMOVE':
-              return acc.filter(item => item.name !== curr.value.name);
-          }
-        }, []);
+    // Create basket$ based on the items$
+    // When the type is 'ADD':
+    //  - if the item is already in the items: Add the count to the current count (this can be negative)
+    //    if the new amount is 0, remove it
+    //  - if it is not already in the items, add the item with a count of 1
+    // When the type is 'REMOVE':
+    //  - Remove the item from the list
+
+    // REMEMBER IMMUTABILITY IS KEY HERE
+    this.basket$;
   }
 
   addItem(item, count) {
