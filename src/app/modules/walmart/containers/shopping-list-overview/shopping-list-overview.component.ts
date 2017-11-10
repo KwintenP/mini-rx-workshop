@@ -54,6 +54,10 @@ export class ShoppingListOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    const countTheNumberOfElements = (items: Array<Item>) => items.reduce<number>((acc: number, curr) => acc + curr.count, 0);
+    const countTheTotalValueOfTheBasket =
+      (items: Array<Item>) => items.reduce<number>((acc: number, curr) => acc + curr.count * curr.salePrice, 0);
+
     const clearData$ = this.reset$
       .mapTo([]);
 
@@ -74,10 +78,10 @@ export class ShoppingListOverviewComponent implements OnInit {
     this.basket$ = this.basketService.basket$;
 
     this.nrOfElements$ = this.basket$
-      .map(items => items.reduce<number>((acc: number, curr) => acc + curr.count, 0));
+      .map(countTheNumberOfElements);
 
     const basketPrice$ = this.basket$
-      .map(items => items.reduce<number>((acc: number, curr) => acc + curr.count * curr.salePrice, 0));
+      .map(countTheTotalValueOfTheBasket);
 
     this.totalPrice$ = basketPrice$.combineLatest(this.vatFree$, (basketPrice, vatFree) => vatFree ? basketPrice / 1.21 : basketPrice)
       .combineLatest(this.discountCode$, (vatBasketPrice, discountCode) => vatBasketPrice - discountCode)
