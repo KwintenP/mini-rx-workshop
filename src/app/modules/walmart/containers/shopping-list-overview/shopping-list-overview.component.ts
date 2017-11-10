@@ -61,31 +61,48 @@ export class ShoppingListOverviewComponent implements OnInit {
     const clearData$ = this.reset$
       .mapTo([]);
 
-    const handledSearchTerm$ = this.searchTerm$
-      .do(_ => this.reset$.next([]))
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .filter(item => item.length > 1);
+    // The search term is a stream of all the input values
 
-    const searchFilter$ = Observable.combineLatest(handledSearchTerm$, this.priceFrom$, this.priceTo$);
+    // Debounce the stream with 200ms
+    // Avoid two time the same value after one another
+    // Filter out the string where the length is 1 or 0
 
-    const searchResults$ = searchFilter$
-      .switchMap(([searchTerm, priceFrom, priceTo]) => this.walmartApiService.searchItems(searchTerm, 0, priceFrom, priceTo))
-      .map(response => response.items);
+    // We have a new stream called handledSearchTerm$ with a search term we can use to trigger
+    const handledSearchTerm$ = this.searchTerm$;
+    // TODO: implement (see instructions above)
 
+    // We want to create a new stream based on the handledSearchTerm$, the priceForm$ and the priceTo$
+    // Every time one of these streams changes, we need to do a new search
+
+    // Create a new stream based on these streams that will emit every time one of them changes
+    const searchFilter$; // TODO implement (see instructions above)
+
+    // Based on our searchFilter$, we want to perform a backend call
+    // What we want to do is map the searchFilter values to a backend call/async action and get the results to create a new stream
+
+    // Based on the searchFilter$, perform a backend call (aka map the filter onto an async action)
+    // Map the response to get the items from it
+    const searchResults$;
+    // TODO: implement (see instructions above)
+
+    // These are already implemented for you
     this.foundItems$ = clearData$.merge(searchResults$);
-
     this.basket$ = this.basketService.basket$;
 
-    this.nrOfElements$ = this.basket$
-      .map(countTheNumberOfElements);
+    // Create a new stream 'nrOfElements$' that hold the number of elements of the basket$
+    // You can use the 'countTheNumberOfElements' method for the calculation
+    this.nrOfElements$;
 
-    const basketPrice$ = this.basket$
-      .map(countTheTotalValueOfTheBasket);
+    // Create a new stream 'basketPrice$ ' that holds the basket price
+    // You can use the 'countTheTotalValueOfTheBasket' method for the calculation
+    const basketPrice$;
 
-    this.totalPrice$ = basketPrice$.combineLatest(this.vatFree$, (basketPrice, vatFree) => vatFree ? basketPrice / 1.21 : basketPrice)
-      .combineLatest(this.discountCode$, (vatBasketPrice, discountCode) => vatBasketPrice - discountCode)
-      .map(totalValue => totalValue.toFixed(1));
+    // The totalPrice$ is a combination of the vatFree$, discountCode$ and the basketPrice$
+    // Every time one changes, the totalPrice$ needs to be recalculated.
+    // When a vatFree$ holds a true value, the 21% tax should be deducted.
+    // The discount code works on the vatFreePrice
+    this.totalPrice$;
+    // TODO: implement (see instructions above)
   }
 
   itemAdded(item: Item) {
