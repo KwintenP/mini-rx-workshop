@@ -54,55 +54,16 @@ export class ShoppingListOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    const countTheNumberOfElements = (items: Array<Item>) => items.reduce<number>((acc: number, curr) => acc + curr.count, 0);
-    const countTheTotalValueOfTheBasket =
-      (items: Array<Item>) => items.reduce<number>((acc: number, curr) => acc + curr.count * curr.salePrice, 0);
+    // Whenever the search term, priceFrom or priceTo changes a backend call must be made
+    // Whenever the user changes one of these, the already present search results must be cleared
+    // The basketService will give you a stream of all the items in it.
+    // Use this to calculate the nrOfElements and the total price
 
-    const clearData$ = this.reset$
-      .mapTo([]);
-
-    // The search term is a stream of all the input values
-
-    // Debounce the stream with 200ms
-    // Avoid two time the same value after one another
-    // Filter out the string where the length is 1 or 0
-
-    // We have a new stream called handledSearchTerm$ with a search term we can use to trigger
-    const handledSearchTerm$ = this.searchTerm$;
-    // TODO: implement (see instructions above)
-
-    // We want to create a new stream based on the handledSearchTerm$, the priceForm$ and the priceTo$
-    // Every time one of these streams changes, we need to do a new search
-
-    // Create a new stream based on these streams that will emit every time one of them changes
-    const searchFilter$; // TODO implement (see instructions above)
-
-    // Based on our searchFilter$, we want to perform a backend call
-    // What we want to do is map the searchFilter values to a backend call/async action and get the results to create a new stream
-
-    // Based on the searchFilter$, perform a backend call (aka map the filter onto an async action)
-    // Map the response to get the items from it
-    const searchResults$;
-    // TODO: implement (see instructions above)
-
-    // These are already implemented for you
-    this.foundItems$ = clearData$.merge(searchResults$);
-    this.basket$ = this.basketService.basket$;
-
-    // Create a new stream 'nrOfElements$' that hold the number of elements of the basket$
-    // You can use the 'countTheNumberOfElements' method for the calculation
-    this.nrOfElements$;
-
-    // Create a new stream 'basketPrice$ ' that holds the basket price
-    // You can use the 'countTheTotalValueOfTheBasket' method for the calculation
-    const basketPrice$;
-
-    // The totalPrice$ is a combination of the vatFree$, discountCode$ and the basketPrice$
-    // Every time one changes, the totalPrice$ needs to be recalculated.
-    // When a vatFree$ holds a true value, the 21% tax should be deducted.
-    // The discount code works on the vatFreePrice
-    this.totalPrice$;
-    // TODO: implement (see instructions above)
+    // The following streams need to be assigned since they are used in the view.
+    // foundItems$: Observable<Array<Item>>;
+    // basket$: Observable<Array<Item>>;
+    // nrOfElements$: Observable<number>;
+    // totalPrice$: Observable<string>;
   }
 
   itemAdded(item: Item) {
