@@ -28,8 +28,7 @@ export class BasketService {
             case 'REMOVE':
               return acc.filter(item => item.name !== curr.value.name);
           }
-        }, [])
-      .do(console.log);
+        }, []);
   }
 
   addItem(item, count) {
