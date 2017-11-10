@@ -33,17 +33,21 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
   styleUrls: ['./shopping-list-overview.component.scss']
 })
 export class ShoppingListOverviewComponent implements OnInit {
+  // Streams drawn from our child components
   searchTerm$ = new BehaviorSubject<string>('');
   priceFrom$ = new ReplaySubject<number>(1);
   priceTo$ = new ReplaySubject<number>(1);
-  reset$ = new Subject<Array<any>>();
   vatFree$ = new BehaviorSubject<boolean>(false);
   discountCode$ = new BehaviorSubject<number>(0);
 
+  // Streams that will be passed to our view
   foundItems$: Observable<Array<Item>>;
   basket$: Observable<Array<Item>>;
   nrOfElements$: Observable<number>;
   totalPrice$: Observable<string>;
+
+  // Intermediate stream used to clear results
+  reset$ = new Subject<Array<any>>();
 
   constructor(private walmartApiService: WalmartApiService,
               private basketService: BasketService) {
@@ -59,8 +63,7 @@ export class ShoppingListOverviewComponent implements OnInit {
       .distinctUntilChanged()
       .filter(item => item.length > 1);
 
-    const searchFilter$ = Observable.combineLatest(handledSearchTerm$, this.priceFrom$, this.priceTo$)
-      .do(console.log);
+    const searchFilter$ = Observable.combineLatest(handledSearchTerm$, this.priceFrom$, this.priceTo$);
 
     const searchResults$ = searchFilter$
       .switchMap(([searchTerm, priceFrom, priceTo]) => this.walmartApiService.searchItems(searchTerm, 0, priceFrom, priceTo))
